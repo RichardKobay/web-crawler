@@ -6,30 +6,24 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.*;
 
 /**
  * Hello world!
- *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
+public class App {
+    public static void main(String[] args) {
         try {
+            Document doc = Jsoup.connect("https://www.imdb.com/name/nm0213136/?ref_=tt_ov_dr").get();
 
-            Document doc = Jsoup.connect("https://www.imdb.com/title/tt1392190/?ref_=hm_tpks_tt_i_1_pd_tp1_pbr_ic").get();
-            // Gets the title
-            System.out.println(doc.title());
+            Element name = doc.select("h1[data-testid=hero__pageTitle] span.hero__primary-text[data-testid=hero__primary-text]").first();
+            Element bornDate = Objects.requireNonNull(doc.select("div[data-testid=birth-and-death-birthdate]").first()).lastElementChild();
+            Element desc = doc.select("div.ipc-html-content-inner-div").first();
 
-            // Gets all the links
-            Elements links = doc.select("a[href]");
-            for (Element link : links) {
-                System.out.println(link.attr("abs:href"));
-            }
+            System.out.println(name.text());
+            System.out.println(bornDate.text());
+            System.out.println(desc.text());
 
-
-            // Element tittle = doc.select("span.hero__primary-text[data-testid=hero__primary-text]").first();
-            // Elements actorLinks = doc.select("a.ipc-metadata-list-item__list-content-item.ipc-metadata-list-item__list-content-item--link");
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
